@@ -1,19 +1,18 @@
 package kr.oddly.java8.chap01;
 
+import static java.lang.Character.isDigit;
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import static java.util.Arrays.*;
-
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.*;
-
 import java.util.stream.Stream;
-import static java.lang.Character.*;
+
+import kr.oddly.java8.model.Person;
 
 import org.junit.Test;
 
@@ -24,7 +23,36 @@ import org.junit.Test;
  * @author nezah
  */
 public class CollectTest {
-
+  @Test
+  public void tryMinSearch(){
+    // traditional
+    List<Person> persons = asList(new Person("john", 25, "Programmer"),
+                                  new Person("mike", 32, "cook"),
+                                  new Person("sarah", 24, "fighter"));
+    Person youngest = persons.get(0);
+    for(Person p : persons){
+      if(p.getAge() < youngest.getAge()){
+        youngest = p;
+      }
+    }
+    
+    assertEquals(persons.get(2), youngest);
+    
+    // functional
+    Person young = persons.stream()
+                    .min(Comparator.comparing(p -> p.getAge()))
+                    .get();
+    assertEquals(persons.get(2), young);
+  }
+  
+  @Test
+  public void flatMapTest(){
+    List<Integer> flatten = Stream.of(asList(1, 2), asList(3, 4))
+                              .flatMap(n -> n.stream())
+                              .collect(toList());
+    assertEquals(asList(1, 2, 3, 4), flatten);
+  }
+  
   @Test
   public void testCollect() {
     List<String> l = Stream.of("a", "b", "c").collect(Collectors.toList());
