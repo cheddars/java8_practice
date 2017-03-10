@@ -24,6 +24,27 @@ import org.junit.Test;
  */
 public class CollectTest {
   @Test
+  public void compositeFun(){
+    
+  }
+  
+  @Test
+  public void reduceTest(){
+    // traditional
+    int acc = 0;
+    List<Integer> numbers = asList(10, 20, 30);
+    for(Integer i : numbers){
+      acc += i;
+    }
+    assertEquals(60, acc);
+    
+    // fun
+    int sum = Stream.of(10, 20, 30)
+                .reduce(0, (ac, el) -> ac + el);
+    assertEquals(60, sum);
+  }
+  
+  @Test
   public void tryMinSearch(){
     // traditional
     List<Person> persons = asList(new Person("john", 25, "Programmer"),
